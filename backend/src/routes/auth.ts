@@ -55,7 +55,9 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const parsed = loginSchema.safeParse(req.body);
+  
 
+  // check if the email and password are valid inputs
   if (!parsed.success) {
     return res.status(400).json({
       error: 'Validation failed',
@@ -69,12 +71,15 @@ router.post('/login', async (req, res) => {
     where: { email },  
   })
 
+  // checks if the user exists in DB
   if (!validUser) {
     return res.status(401).json({ error: 'Invalid email or password' });
   }
 
+  // if the user is valid, then we get validUser's hashed password and compare it to the received password
   const isMatch = await bcrypt.compare(password, validUser.passwordHash);
 
+  // if the received password does not match the validUser's hashed password, then it's not valid
   if (!isMatch) {
     return res.status(401).json({ error: 'Invalid email or password' });
   }
