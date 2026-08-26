@@ -21,4 +21,9 @@ export const loginSchema = z.object({
 export type RegisterLogin = z.infer<typeof loginSchema>;
 
 
+export const refreshSchema = z.object({
+  refreshToken: z.string().min(1, 'refresh token is invalid'),
+});
+
+export type RegisterRefresh = z.infer<typeof refreshSchema>;
 
