@@ -1,9 +1,7 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../lib/prisma';
-import { registerSchema } from '../lib/schema';
-import { loginSchema } from '../lib/schema';
-import { refreshSchema } from '../lib/schema';
+import { registerSchema, loginSchema, refreshSchema } from '../lib/schema';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
@@ -186,6 +184,48 @@ router.post('/refresh', async (req, res) => {
     success: true,
     accessToken: newAccessToken,
     refreshToken: newRawRefreshToken,
+  });
+});
+
+router.post('/logout', async (req, res) => {
+  const parsed = refreshSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    return res.status(400).json({
+      error: 'Validation failed',
+      details: parsed.error.flatten().fieldErrors,
+    });
+  }
+
+  const { refreshToken } = parsed.data;
+
+  const candidateTokens = await prisma.refreshToken.findMany({
+    where: {
+      revokedAt: null,
+      expiresAt: { gt: new Date() },
+    },
+  });
+
+  let matchedToken = null;
+
+  for (const candidate of candidateTokens) {
+    const isMatch = await bcrypt.compare(refreshToken, candidate.tokenHash);
+    if (isMatch) {
+      matchedToken = candidate;
+      break;
+    }
+  }
+
+  if (matchedToken) {
+    await prisma.refreshToken.update({
+      where: { id: matchedToken.id },
+      data: { revokedAt: new Date() },
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: 'Logged out successfully',
   });
 });
 
