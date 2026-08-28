@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth';
+import applicationRoutes from './routes/applications';
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json());    // parses incoming JSON request bodies
 
 app.use('/auth', authRoutes);
+app.use('/applications', applicationRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });

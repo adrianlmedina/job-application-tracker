@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
+import { Router } from 'express';
 
 
 import jwt from 'jsonwebtoken';
 
 
-router = Router()
+const router = Router();
 
 
 

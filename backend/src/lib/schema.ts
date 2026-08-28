@@ -27,3 +27,23 @@ export const refreshSchema = z.object({
 
 export type RegisterRefresh = z.infer<typeof refreshSchema>;
 
+
+
+export const createApplicationSchema = z.object({
+  companyName: z.string().min(1, 'Company name is required'),
+  roleTitle: z.string().min(1, 'Role title is required'),
+  status: z.enum([
+    'WISHLIST',
+    'APPLIED',
+    'PHONE_SCREEN',
+    'INTERVIEW',
+    'OFFER',
+    'REJECTED',
+    'WITHDRAWN',
+  ]).optional(),
+  jobUrl: z.string().url('Must be a valid URL').optional(),
+  location: z.string().optional(),
+  workType: z.enum(['REMOTE', 'HYBRID', 'ONSITE']).optional(),
+});
+
+export type CreateApplicationInput = z.infer<typeof createApplicationSchema>;
