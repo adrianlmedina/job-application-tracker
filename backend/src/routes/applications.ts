@@ -5,6 +5,9 @@ import { createApplicationSchema } from '../lib/schema';
 
 const router = Router();
 
+
+// this creates a new application tied to the logged-in user
+// it's validated by Zod
 router.post('/', requireAuth, async (req, res) => {
     const parsed = createApplicationSchema.safeParse(req.body);
 
@@ -27,5 +30,18 @@ router.post('/', requireAuth, async (req, res) => {
 
     return res.status(201).json({ application });
 });
+
+
+// here we get a list of the user's applications
+router.get('/', requireAuth, async (req, res) => {
+    const userID = req.user!.userID;
+    const applications = await prisma.application.findMany({
+        where: {
+            userId: userID},
+    });
+
+    return res.status(200).json({ applications});
+});
+
 
 export default router;

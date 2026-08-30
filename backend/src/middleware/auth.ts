@@ -20,6 +20,7 @@ declare global {
   }
 }
 
+// verifies if the user's token is valid 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
 
