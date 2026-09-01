@@ -47,3 +47,25 @@ export const createApplicationSchema = z.object({
 });
 
 export type CreateApplicationInput = z.infer<typeof createApplicationSchema>;
+
+
+
+export const patchSchema = z.object({
+  companyName: z.string().min(1, 'Company name is required').optional(),
+  roleTitle: z.string().min(1, 'Role title is required').optional(),
+  status: z.enum([
+    'WISHLIST',
+    'APPLIED',
+    'PHONE_SCREEN',
+    'INTERVIEW',
+    'OFFER',
+    'REJECTED',
+    'WITHDRAWN',
+  ]).optional(),
+  jobUrl: z.string().url('Must be a valid URL').optional(),
+  location: z.string().optional(),
+  workType: z.enum(['REMOTE', 'HYBRID', 'ONSITE']).optional(),
+});
+
+export type PatchSchemaInput = z.infer<typeof patchSchema>;
+
