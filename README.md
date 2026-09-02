@@ -6,7 +6,6 @@ This is a full-stack CRUD application that keeps track of what jobs the user has
 
 # DEMO
 
-In progress
 ![Job Application Tracker Demo](./job-tracker-gif.gif)
 
 # Architecture Explanation
