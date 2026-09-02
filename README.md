@@ -1,4 +1,4 @@
-# Second Brain 
+# Job Application Tracker
 
 This is a full-stack CRUD application that keeps track of what jobs the user has been applying to. It logs companies, roles, and statuses.
 
